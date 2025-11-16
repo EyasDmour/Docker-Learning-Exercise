@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="margin:4px 0 16px">Tables</h2>
+<div class="grid cols-3">
+  {% for t in tables %}
+  <div class="card">
+    <h3>{{ t }}</h3>
+    <div class="muted" style="margin-bottom:10px">Auto explorer</div>
+    <div style="display:flex;gap:10px">
+      <a class="btn btn-sm btn-outline-primary" href="/table/{{ t }}">View table</a>
+      <a class="btn btn-sm btn-outline-primary" href="/cards/{{ t }}">Cards</a>
+      <a class="btn btn-sm btn-outline-primary" href="/timeline/{{ t }}">Timeline</a>
+      <a class="btn btn-sm btn-primary" href="/insert/{{ t }}">Insert</a>
+    </div>
+  </div>
+  {% endfor %}
+  {% if tables|length == 0 %}
+  <div class="muted">No user tables found. Ensure your database has tables in public schema.</div>
+  {% endif %}
+</div>
+{% endblock %}

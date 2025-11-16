@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="margin:4px 0 12px">Cities — Cards</h2>
+<div class="toolbar">
+  <div class="muted">Latest {{ rows|length }} cities</div>
+  <div>
+    <a class="btn btn-sm btn-outline-primary" href="/table/public.cities">Table</a>
+    <a class="btn btn-sm btn-outline-primary" href="/">Back</a>
+  </div>
+</div>
+<div id="cards" class="grid cols-3">
+  {% for r in rows %}
+  <div class="rowcard" data-pk="{{ r[pk_cols[0]] if pk_cols and pk_cols[0] in r else '' }}">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font-weight:600">{{ r.get('name') or r.get('city') or 'City' }}</div>
+      {% if r.get('country') %}<span class="pill">{{ r['country'] }}</span>{% endif %}
+    </div>
+    <div class="kv" style="margin-top:8px">
+      {% for c in columns %}
+      {% if c not in ['name','country'] %}
+      <div>{{ c }}</div>
+      <div>{{ r[c] }}</div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

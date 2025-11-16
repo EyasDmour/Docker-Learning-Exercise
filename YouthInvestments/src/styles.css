@@ -1,0 +1,195 @@
+:root {
+    color-scheme: light dark;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+#root {
+    display: grid;
+    padding: 2rem;
+}
+
+.app-shell {
+    padding: 2rem;
+    border: 1px solid rgba(148, 163, 184, .3);
+    border-radius: 12px;
+    background: rgba(15, 23, 42, .9);
+}
+
+
+
+header { /* This header has a navbar element with buttons inside */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+nav {
+    display: flex;
+    justify-content: space-around;
+}
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #cbd5f5;
+    padding: 5px 10px;
+    font-weight: 600;
+}
+nav button {
+    margin: 0 10px;
+    background: rgba(255,255,255,0.12);
+    color: #e2e8f0;
+    border: 1px solid rgba(148,163,184,.4);
+    padding: 5px 12px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+}
+nav button:hover {
+    background: rgba(255,255,255,0.22);
+}
+
+/* Profile button & dropdown */
+.profile-wrapper { position: relative; display: flex; align-items: center; }
+.profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(148,163,184,.4);
+    padding: 5px 10px;
+    border-radius: 24px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+.profile-btn:hover { background: rgba(255,255,255,0.22); }
+.avatar { width:24px; height:24px; border-radius:50%; object-fit:cover; }
+.avatar.lg { width:48px; height:48px; }
+.caret { transition: transform .2s ease; }
+.caret.open { transform: rotate(180deg); }
+.profile-dropdown {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    width: 280px;
+    background: rgba(15,23,42,.95);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(148,163,184,.35);
+    border-radius: 16px;
+    box-shadow: 0 6px 24px -4px rgba(0,0,0,.4);
+    animation: fadeSlide .18s ease;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+@keyframes fadeSlide { from { opacity:0; transform: translateY(-6px);} to { opacity:1; transform: translateY(0);} }
+.dropdown-header { display:flex; gap:12px; padding:16px 16px 8px; align-items:center; }
+.user-lines { display:flex; flex-direction:column; gap:4px; }
+.user-name { font-weight:600; }
+.user-email { font-size: .85rem; color:#94a3b8; word-break: break-all; }
+.dropdown-body { padding: 4px 16px 12px; display:grid; gap:6px; }
+.info-row { display:flex; gap:6px; font-size:.8rem; }
+.info-row .label { color:#64748b; }
+.info-row .value { color:#e2e8f0; flex:1; word-break: break-all; }
+.dropdown-actions { padding:12px 16px 16px; display:flex; flex-direction:column; gap:10px; }
+.dropdown-item { text-decoration:none; color:#38bdf8; font-size:.9rem; }
+.dropdown-item:hover { text-decoration:underline; }
+.dropdown-sep { height:1px; background: rgba(148,163,184,.3); margin:4px 0; }
+.profile-name { max-width: 150px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+nav a:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+
+}
+
+/* Projects grid and cards */
+
+.projects-grid {
+    display: grid;
+    /* Cards grow until ~300px each; when there's room, a new column is added */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.project-card{
+    border: 1px solid rgba(148, 163, 184, .3);
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px hsla(0, 0%, 0%, 0.1);
+    padding: 1rem;
+    /* Let grid control width; avoid overflow from padding/border */
+    box-sizing: border-box;
+    display: block;
+}
+.project-card__title {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.project-card__body {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Make any image in the project card scale nicely */
+.project-card img {
+    width: 100%;
+    /* Fix the visual height so cards don't grow vertically with width */
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* Auth pages */
+.auth-container {
+    display: grid;
+    place-items: center;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    width: min(480px, 100%);
+    box-sizing: border-box;
+    border: 1px solid rgba(148,163,184,.3);
+    border-radius: 12px;
+    background: rgba(15,23,42,.9);
+    padding: 1.5rem;
+}
+
+.auth-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.auth-form input {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 10px auto;
+    padding: .75rem;
+    border-radius: 8px;
+    border: 1px solid rgba(148,163,184,.4);
+    background: rgba(2,6,23,.6);
+    color: #e2e8f0;
+}
+
+.auth-form button {
+    justify-self: start;
+    background: linear-gradient(135deg, #38bdf8, #6366f1);
+    border: none;
+    color: #0f172a;
+    font-weight: 700;
+    padding: .75rem 1.25rem;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.auth-alt { margin-top: .75rem; color: #cbd5f5; }
+.auth-alt a { color: #38bdf8; }

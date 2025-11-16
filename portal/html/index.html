@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PG_DB Service Portal</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.5;
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      main {
+        width: min(860px, 100%);
+        background: rgba(15, 23, 42, 0.92);
+        border-radius: 12px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        padding: 2rem 3rem;
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.45);
+      }
+
+      h1 {
+        margin-top: 0;
+        font-size: 2rem;
+        color: #f8fafc;
+      }
+
+      p {
+        margin-bottom: 1.5rem;
+        color: rgba(203, 213, 225, 0.9);
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        gap: 1rem;
+      }
+
+      li {
+        border-radius: 10px;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        background: rgba(30, 41, 59, 0.8);
+        padding: 1rem 1.5rem;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+
+      li:hover {
+        transform: translateY(-2px);
+        border-color: rgba(56, 189, 248, 0.6);
+      }
+
+      a {
+        color: #38bdf8;
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      small {
+        display: block;
+        margin-top: 0.35rem;
+        color: rgba(148, 163, 184, 0.85);
+      }
+
+      code {
+        font-family: "JetBrains Mono", "Fira Code", monospace;
+        font-size: 0.95rem;
+        color: #f8fafc;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>PG_DB Service Portal</h1>
+      <p>
+        Every container in your stack exposes a useful interface. Use the shortcuts below while you
+        iterate on queries, data insertion, and app logic.
+      </p>
+      <ul>
+        <li>
+          <a href="http://localhost:5173" target="_blank" rel="noopener noreferrer">
+            GraphQL Client
+          </a>
+          <small>React/Vite explorer for Hasura. Runs in <code>graphql-client</code>.</small>
+        </li>
+        <li>
+          <a href="http://localhost:5174" target="_blank" rel="noopener noreferrer">
+            YouthInvestments
+          </a>
+          <small>Blank React template. Also proxied at <code>/youthinvestments/</code>.</small>
+        </li>
+        <li>
+          <a href="http://localhost:8080" target="_blank" rel="noopener noreferrer">
+            Hasura Console
+          </a>
+          <small>Browse GraphQL schema and run queries. Container <code>hasura</code>.</small>
+        </li>
+        <li>
+          <a href="http://localhost:5050" target="_blank" rel="noopener noreferrer">
+            pgAdmin
+          </a>
+          <small>Full PostgreSQL admin UI from <code>pgadmin</code>.</small>
+        </li>
+        <li>
+          <a href="http://localhost:8000" target="_blank" rel="noopener noreferrer">
+            FastAPI UI
+          </a>
+          <small>Existing Python UI served by <code>PG_UI</code>.</small>
+        </li>
+      </ul>
+      <p>
+        Tip: keep this portal open in a pinned tab while coding. To add another service link, edit
+        <code>portal/html/index.html</code> and restart the portal container.
+      </p>
+
+      <section style="margin-top: 2rem">
+        <h2 style="color: #f8fafc">Reverse-proxy routes</h2>
+        <p>The portal also proxies each UI under predictable sub-paths:</p>
+        <ul>
+          <li><code>/graphql-client/</code> → Vite dev server</li>
+          <li><code>/youthinvestments/</code> → YouthInvestments React app</li>
+          <li><code>/hasura/</code> → Hasura console</li>
+          <li><code>/pgadmin/</code> → pgAdmin web UI</li>
+          <li><code>/fastapi/</code> → Python UI</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

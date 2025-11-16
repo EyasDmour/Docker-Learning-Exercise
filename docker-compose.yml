@@ -1,0 +1,89 @@
+services:
+  db:
+    image: postgres
+    container_name: PGQL
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgresData:/var/lib/postgresql
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: PGadmin
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+
+  ui:
+    build: ./ui
+    container_name: PG_UI
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql+psycopg://admin:admin123@db:5432/mydb
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ui:/app
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--reload-exclude", "../postgresData"]
+
+  graphql-engine:
+    image: hasura/graphql-engine:v2.36.1
+    container_name: hasura
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    restart: always
+    environment:
+      # WARNING: For local dev only; override via real secrets in deployment
+      HASURA_GRAPHQL_DATABASE_URL: postgres://admin:admin123@db:5432/mydb
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ADMIN_SECRET: admin123
+      HASURA_GRAPHQL_JWT_SECRET: '{"jwk_url":"https://youthinvestments.eu.auth0.com/.well-known/jwks.json"}'
+    volumes:
+      - hasura_metadata:/hasura-metadata
+
+  graphql-client:
+    build: ./client
+    container_name: graphql_client
+    restart: unless-stopped
+    depends_on:
+      - graphql-engine
+    environment:
+      VITE_HASURA_URL: http://graphql-engine:8080/v1/graphql
+      # For production use, inject VITE_HASURA_ADMIN_SECRET from a secure source
+      VITE_HASURA_ADMIN_SECRET: admin123
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]
+
+  youthinvestments:
+    build: ./YouthInvestments
+    container_name: youthinvestments
+    restart: unless-stopped
+    ports:
+      - "5174:5174"
+    volumes:
+      - ./YouthInvestments:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5174"]
+
+volumes:
+  postgresData:
+  hasura_metadata:

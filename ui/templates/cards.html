@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="margin:4px 0 12px">{{ table }} — Cards</h2>
+<div class="toolbar">
+  <div class="muted">Showing latest {{ rows|length }} rows. Auto-refresh for new rows works when the table has a single integer primary key.</div>
+  <div>
+    <a class="btn btn-sm btn-outline-primary" href="/table/{{ table }}">Table</a>
+    <a class="btn btn-sm btn-outline-primary" href="/">Back</a>
+  </div>
+</div>
+<div id="cards" class="grid cols-3">
+  {% for r in rows %}
+  <div class="rowcard mb-3" data-pk="{{ r[pk_cols[0]] if pk_cols and pk_cols[0] in r else '' }}">
+    <div style="font-weight:600; margin-bottom:8px">{{ table }}</div>
+    <div class="kv">
+      {% for c in columns %}
+      <div>{{ c }}</div>
+      <div>{{ r[c] }}</div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<script>
+(function(){
+  const pk = "{{ pk_cols[0] if pk_cols else '' }}";
+  if (!pk) return;
+  const cards = document.getElementById('cards');
+  function getLastPk(){
+    const first = cards.querySelector('.rowcard');
+    return first ? Number(first.getAttribute('data-pk')) : null;
+  }
+  async function poll(){
+    const last = getLastPk();
+    if (last === null || Number.isNaN(last)) return;
+    try{
+      const res = await fetch(`/api/{{ table }}/new?after_pk=${last}`);
+      if(!res.ok) return;
+      const data = await res.json();
+      if (data.rows && data.rows.length){
+        // prepend new cards
+        const frag = document.createDocumentFragment();
+        for (const r of data.rows.reverse()){
+          const card = document.createElement('div');
+          card.className = 'rowcard';
+          card.setAttribute('data-pk', r[pk]);
+          let html = `<div style="font-weight:600; margin-bottom:8px">{{ table }}</div><div class="kv">`;
+          {% for c in columns %}
+          html += `<div>{{ c }}</div><div>${String(r["{{ c }}"])}</div>`;
+          {% endfor %}
+          html += '</div>';
+          card.innerHTML = html;
+          frag.appendChild(card);
+        }
+        cards.prepend(frag);
+      }
+    }catch(e){/* ignore */}
+  }
+  setInterval(poll, 3000);
+})();
+</script>
+{% endblock %}

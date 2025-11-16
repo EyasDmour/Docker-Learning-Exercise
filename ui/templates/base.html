@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ title or 'PG Explorer' }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0b1020;--panel:#121833;--muted:#a0a8c0;--text:#e6e9f2;--accent:#6ca0ff;--accent2:#7bffda;--btn-bg:rgba(255,255,255,.07);--btn-border:rgba(255,255,255,.14);--btn-hover:rgba(255,255,255,.12);--primary:#6ca0ff;}
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(160deg,var(--bg),#0e1530 60%,#0b1020);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    header{padding:16px 24px;border-bottom:1px solid rgba(255,255,255,.06);backdrop-filter:saturate(140%) blur(6px);position:sticky;top:0;background:rgba(11,16,32,.55)}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px}
+    .grid{display:grid;gap:16px}
+    .grid.cols-3{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+    .card{background:radial-gradient(80% 120% at 50% 0%,rgba(108,160,255,.1),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px}
+    .card h3{margin:0 0 8px;font-size:16px}
+    .muted{color:var(--muted)}
+    .table{width:100%;border-collapse:collapse}
+    .table th,.table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left}
+    .pill{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(123,255,218,.12);border:1px solid rgba(123,255,218,.3);font-size:12px;color:#b8ffee}
+    .toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:10px 0 18px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;background:var(--btn-bg);border:1px solid var(--btn-border);color:var(--text);font-weight:500}
+  .btn:hover{background:var(--btn-hover)}
+  .btn-sm{padding:6px 10px;font-size:12px;border-radius:8px}
+  .btn-primary{background:linear-gradient(180deg,rgba(108,160,255,.25),rgba(108,160,255,.15));border-color:rgba(108,160,255,.5)}
+  .btn-primary:hover{background:linear-gradient(180deg,rgba(108,160,255,.35),rgba(108,160,255,.2))}
+  .btn-outline-primary{background:transparent;border-color:rgba(108,160,255,.5);color:#cfe0ff}
+  .btn-outline-primary:hover{background:rgba(108,160,255,.1)}
+  .btn-ghost{background:transparent;border-color:transparent}
+    .rowcard{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px}
+    .kv{display:grid;grid-template-columns:140px 1fr;gap:8px}
+    .kv div:first-child{color:var(--muted)}
+    .footer{margin-top:24px;color:var(--muted);font-size:12px}
+
+    /* Form controls */
+    .form-label{display:block;margin-bottom:6px}
+    .form-control,.form-select, .input{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:inherit;outline:none}
+    .form-control:focus,.form-select:focus,.input:focus{border-color:rgba(108,160,255,.6);box-shadow:0 0 0 3px rgba(108,160,255,.18)}
+    .form-select{appearance:none}
+    .mb-3{margin-bottom:12px}
+    .field{display:flex;flex-direction:column}
+    .field-inline{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
+
+    /* Enhanced dropdown (custom select) */
+    .select-wrap{position:relative;display:block}
+    .select-hidden{display:none}
+    .select-display{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border:1px solid rgba(255,255,255,.15);border-radius:10px;background:rgba(255,255,255,.06);color:var(--text);cursor:pointer;user-select:none}
+    .select-display:focus{outline:none;border-color:rgba(108,160,255,.6);box-shadow:0 0 0 3px rgba(108,160,255,.18)}
+    .select-caret{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid var(--muted);opacity:.9}
+    .select-menu{position:absolute;z-index:30;top:100%;left:0;right:0;background:rgba(15,22,45,.78);backdrop-filter:blur(10px) saturate(120%);border:1px solid rgba(255,255,255,.14);border-top:none;border-bottom-left-radius:12px;border-bottom-right-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.35);display:none;max-height:260px;overflow:auto}
+    .select-wrap.open .select-menu{display:block}
+    .select-wrap.open .select-display{border-bottom-left-radius:0;border-bottom-right-radius:0}
+    .select-option{padding:10px 12px;color:var(--text);font-size:14px;cursor:pointer}
+    .select-option:hover{background:rgba(255,255,255,.08)}
+    .select-option[aria-selected="true"]{background:linear-gradient(180deg,rgba(108,160,255,.25),rgba(108,160,255,.12))}
+    .select-empty{padding:10px 12px;color:var(--muted);font-size:14px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <div>
+        <div style="font-weight:600">PG Explorer</div>
+        <div class="muted" style="font-size:12px">{{ subtitle or "Browse your Postgres data" }}</div>
+      </div>
+  <a class="btn btn-sm btn-outline-primary" href="/">Home</a>
+  <a class="btn btn-sm btn-outline-primary" href="/operations">Operations</a>
+    </div>
+  </header>
+  <main class="wrap">
+    {% block content %}{% endblock %}
+    <div class="footer">Connected to: <span class="pill">{{ db_url }}</span></div>
+  </main>
+  <script>
+    (function(){
+      function enhanceSelect(sel){
+        if(sel.dataset.enhanced) return;
+        sel.dataset.enhanced = '1';
+        const wrap = document.createElement('div');
+        wrap.className = 'select-wrap';
+        sel.parentNode.insertBefore(wrap, sel);
+        wrap.appendChild(sel);
+        sel.classList.add('select-hidden');
+
+        const display = document.createElement('div');
+        display.className = 'select-display';
+        display.tabIndex = 0;
+        const labelSpan = document.createElement('span');
+        const caret = document.createElement('span');
+        caret.className = 'select-caret';
+        display.appendChild(labelSpan);
+        display.appendChild(caret);
+        wrap.appendChild(display);
+
+        const menu = document.createElement('div');
+        menu.className = 'select-menu';
+        wrap.appendChild(menu);
+
+        function renderOptions(){
+          menu.innerHTML = '';
+          const opts = Array.from(sel.options || []);
+          if(!opts.length){
+            const empty = document.createElement('div');
+            empty.className = 'select-empty';
+            empty.textContent = 'No options';
+            menu.appendChild(empty);
+            return;
+          }
+          opts.forEach(function(o){
+            const div = document.createElement('div');
+            div.className = 'select-option';
+            div.setAttribute('role','option');
+            div.setAttribute('data-value', o.value);
+            if(o.value === sel.value) div.setAttribute('aria-selected','true');
+            div.textContent = o.textContent || o.value;
+            div.addEventListener('click', function(){
+              sel.value = o.value;
+              updateLabel();
+              closeMenu();
+            });
+            menu.appendChild(div);
+          });
+        }
+
+        function updateLabel(){
+          const opt = sel.options[sel.selectedIndex];
+          labelSpan.textContent = opt ? opt.textContent : '';
+          // Reflect selection state in menu
+          menu.querySelectorAll('.select-option').forEach(function(el){
+            if(el.getAttribute('data-value') === (sel.value||'')) el.setAttribute('aria-selected','true');
+            else el.removeAttribute('aria-selected');
+          });
+        }
+
+        function openMenu(){ wrap.classList.add('open'); }
+        function closeMenu(){ wrap.classList.remove('open'); }
+
+        display.addEventListener('click', function(e){
+          e.stopPropagation();
+          wrap.classList.toggle('open');
+        });
+        display.addEventListener('keydown', function(e){
+          if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); wrap.classList.toggle('open'); }
+          else if(e.key === 'Escape'){ closeMenu(); }
+        });
+        document.addEventListener('click', function(){ closeMenu(); });
+        sel.addEventListener('change', updateLabel);
+
+        renderOptions();
+        updateLabel();
+      }
+
+      document.addEventListener('DOMContentLoaded', function(){
+        document.querySelectorAll('select.form-select').forEach(enhanceSelect);
+      });
+    })();
+  </script>
+</body>
+</html>

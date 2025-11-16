@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="margin:4px 0 12px">{{ table }} — Timeline</h2>
+<div class="toolbar">
+  <div class="muted">Date column: <strong>{{ date_col }}</strong></div>
+  <div>
+    <a class="btn btn-sm btn-outline-primary" href="/table/{{ table }}">Table</a>
+    <a class="btn btn-sm btn-outline-primary" href="/cards/{{ table }}">Cards</a>
+    <a class="btn btn-sm btn-outline-primary" href="/">Back</a>
+  </div>
+</div>
+
+<form method="get" class="card" style="margin-bottom:14px; display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap">
+  <input type="hidden" name="date_col" value="{{ date_col }}"/>
+  <div class="mb-3">
+    <label class="form-label muted" style="font-size:12px">Search</label>
+    <input class="form-control" name="q" value="{{ q or '' }}" placeholder="text contains..." />
+  </div>
+  <div class="mb-3">
+    <label class="form-label muted" style="font-size:12px">Day</label>
+    <input class="form-control" type="date" name="day" value="{{ selected_day or '' }}" />
+  </div>
+  <div class="mb-3">
+    <button class="btn btn-sm btn-primary" type="submit">Apply</button>
+    {% if selected_day %}
+    <a class="btn btn-sm btn-outline-primary" href="/export/{{ table }}?date_from={{ selected_day }}&date_to={{ selected_day }}&date_col={{ date_col }}&q={{ q or '' }}">Export day CSV</a>
+    {% endif %}
+  </div>
+</form>
+
+<div style="display:grid; grid-template-columns: 280px 1fr; gap:16px; align-items:start">
+  <div class="card">
+    <div style="font-weight:600; margin-bottom:10px">Recent days</div>
+    <div style="display:flex; flex-direction:column; gap:8px; max-height:70vh; overflow:auto">
+      {% for b in buckets %}
+      <a class="btn btn-sm btn-outline-primary" href="?date_col={{ date_col }}&day={{ b['day'] }}&q={{ q or '' }}">
+        <span style="min-width:110px; display:inline-block">{{ b['day'] }}</span>
+        <span class="pill">{{ b['n'] }}</span>
+      </a>
+      {% endfor %}
+      {% if (buckets|length) == 0 %}
+      <div class="muted">No data to show.</div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="grid cols-3" id="cards">
+    {% for r in rows %}
+    <div class="rowcard mb-3">
+      <div style="font-weight:600; margin-bottom:8px">{{ table }}</div>
+      <div class="kv">
+        {% for c in columns %}
+        <div>{{ c }}</div>
+        <div>{{ r[c] }}</div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

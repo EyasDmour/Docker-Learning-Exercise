@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="margin:4px 0 12px">Inserted into {{ table }}</h2>
+<div class="card">
+  <div class="muted" style="margin-bottom:8px">Values</div>
+  <div class="kv">
+    {% for k,v in values.items() %}
+    <div>{{ k }}</div>
+    <div>{{ v }}</div>
+    {% endfor %}
+  </div>
+  <div style="margin-top:14px; display:flex; gap:10px">
+    <a class="btn btn-primary" href="/table/{{ table }}">Back to table</a>
+    <a class="btn btn-outline-primary" href="/insert/{{ table }}">Insert another</a>
+  </div>
+</div>
+{% endblock %}

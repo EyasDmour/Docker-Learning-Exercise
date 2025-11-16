@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="margin:4px 0 12px">{{ table }}</h2>
+<div class="toolbar">
+  <div class="muted">Primary key: {{ pk_cols|join(', ') if pk_cols else 'None' }}</div>
+  <div>
+    <a class="btn btn-sm btn-outline-primary" href="/cards/{{ table }}">Cards</a>
+    <a class="btn btn-sm btn-outline-primary" href="/timeline/{{ table }}">Timeline</a>
+    <a class="btn btn-sm btn-primary" href="/insert/{{ table }}">Insert</a>
+    <a class="btn btn-sm btn-outline-primary" href="/">Back</a>
+  </div>
+</div>
+
+<form method="get" class="card field-inline" style="margin-bottom:14px;">
+  <div class="mb-3 field">
+    <label class="form-label muted" style="font-size:12px">Search</label>
+    <input class="form-control" name="q" value="{{ q or '' }}" placeholder="text contains..." />
+  </div>
+  <div class="mb-3 field">
+    <label class="form-label muted" style="font-size:12px">Date from</label>
+    <input class="form-control" type="date" name="date_from" value="{{ date_from or '' }}" />
+  </div>
+  <div class="mb-3 field">
+    <label class="form-label muted" style="font-size:12px">Date to</label>
+    <input class="form-control" type="date" name="date_to" value="{{ date_to or '' }}" />
+  </div>
+  <div class="mb-3 field">
+    <label class="form-label muted" style="font-size:12px">Date column (optional)</label>
+    <select class="form-select" name="date_col">
+      <option value="">Auto</option>
+      {% for cm in cols_meta %}
+        {% if 'DATE' in (cm['type'] | string | upper) or 'TIMESTAMP' in (cm['type'] | string | upper) %}
+          <option value="{{ cm['name'] }}" {% if date_col==cm['name'] %}selected{% endif %}>{{ cm['name'] }}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3 field">
+    <label class="form-label muted" style="font-size:12px">Limit</label>
+    <input class="form-control" type="number" name="limit" min="1" max="500" value="{{ limit }}" style="width:100px"/>
+  </div>
+  <div class="mb-3 field" style="gap:10px;flex-direction:row;align-items:center">
+    <button class="btn btn-sm btn-primary" type="submit">Apply</button>
+    <a class="btn btn-sm btn-outline-primary" href="/export/{{ table }}?q={{ q or '' }}&date_from={{ date_from or '' }}&date_to={{ date_to or '' }}&date_col={{ date_col or '' }}">Export CSV</a>
+  </div>
+</form>
+<div style="overflow:auto">
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      {% for c in columns %}
+      <th>{{ c }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      {% for c in columns %}
+      <td>{{ r[c] }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+<div class="toolbar">
+  <div class="muted">Page {{ page }}</div>
+  <div>
+    {% if page > 1 %}
+    <a class="btn btn-sm btn-outline-primary" href="?page={{ page - 1 }}">Prev</a>
+    {% endif %}
+    {% if rows|length == limit %}
+    <a class="btn btn-sm btn-outline-primary" href="?page={{ page + 1 }}">Next</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

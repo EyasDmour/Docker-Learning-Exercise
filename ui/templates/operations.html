@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Database Operations{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mt-4">Database Operations</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Views</h2>
+            <div class="d-grid gap-2">
+                {% for view in views %}
+                    <a href="{{ request.url_for('view_table', table_name=view) }}" class="btn btn-outline-primary mb-2">{{ view }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2>Procedures</h2>
+            {% for proc_name, params in procedures.items() %}
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">{{ proc_name }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ request.url_for('call_procedure', proc_name=proc_name) }}" method="post">
+                            {% for param in params %}
+                                <div class="mb-3 field">
+                                    <label class="form-label" for="{{ proc_name }}_{{ param.name }}">{{ param.name }} <span class="muted">({{ param.type }})</span></label>
+                                    {% if param.options %}
+                                      <select class="form-select" id="{{ proc_name }}_{{ param.name }}" name="{{ param.name }}">
+                                        <option value="">-- Select --</option>
+                                        {% for opt in param.options %}
+                                          <option value="{{ opt.id }}">{{ opt.label }} (ID {{ opt.id }})</option>
+                                        {% endfor %}
+                                      </select>
+                                    {% else %}
+                                      <input class="form-control" id="{{ proc_name }}_{{ param.name }}" name="{{ param.name }}" />
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary">Execute</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

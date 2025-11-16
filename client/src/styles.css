@@ -1,0 +1,145 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.4;
+  font-weight: 400;
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+}
+
+.app-shell {
+  width: min(960px, 100%);
+  background-color: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(8px);
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 1.75rem;
+  color: #f8fafc;
+}
+
+form {
+  display: grid;
+  gap: 1rem;
+}
+
+label {
+  font-weight: 600;
+  color: #cbd5f5;
+}
+
+textarea,
+input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background-color: rgba(15, 23, 42, 0.8);
+  color: #f8fafc;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.9rem;
+}
+
+textarea:focus,
+input:focus {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}
+
+button {
+  justify-self: flex-start;
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  border: none;
+  color: #0f172a;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(56, 189, 248, 0.35);
+}
+
+.status-bar {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: rgba(15, 23, 42, 0.75);
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: #f8fafc;
+}
+
+pre {
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  overflow-x: auto;
+}
+
+.table-wrapper {
+  margin-top: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  overflow: hidden;
+}
+
+.table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-wrapper th,
+.table-wrapper td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.table-wrapper th {
+  background-color: rgba(15, 23, 42, 0.9);
+  color: #38bdf8;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.table-wrapper td {
+  color: #e2e8f0;
+  font-size: 0.95rem;
+}
+
+.table-wrapper tbody tr:hover {
+  background-color: rgba(30, 41, 59, 0.6);
+}
+
+.empty-state {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 1px dashed rgba(148, 163, 184, 0.3);
+  color: rgba(148, 163, 184, 0.8);
+  text-align: center;
+}

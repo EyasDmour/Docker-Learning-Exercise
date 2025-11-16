@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="margin:4px 0 12px">Insert into {{ table }}</h2>
+<div class="card">
+  <form method="post" class="field" style="gap:14px">
+    {% if errors and errors.get('_global') %}
+      <div class="rowcard" style="border-color:rgba(255,120,120,.5);background:rgba(255,120,120,.08)">
+        {{ errors.get('_global') }}
+      </div>
+    {% endif %}
+    {% for c in cols %}
+      {% set name = c['name'] %}
+      {% set type_str = (c['type'] | string | upper) %}
+      <div class="field">
+        <label class="form-label">{{ name }} {% if not c['nullable'] %}<span class="muted">(required)</span>{% endif %}</label>
+        {# Foreign key dropdown if available #}
+        {% if c.get('fk') and c['fk'].get('options') %}
+          <select class="form-select" name="{{ name }}">
+            <option value="">-- Select --</option>
+            {% for opt in c['fk']['options'] %}
+              {% set is_selected = (prev and prev.get(name) and (prev.get(name)|string) == (opt['id']|string)) %}
+              <option value="{{ opt['id'] }}" {% if is_selected %}selected{% endif %}>{{ opt['label'] }} (ID {{ opt['id'] }})</option>
+            {% endfor %}
+          </select>
+        {% elif 'BOOLEAN' in type_str %}
+          <input class="form-control" type="checkbox" name="{{ name }}" {% if prev and prev.get(name) in ['on','true','1','True'] %}checked{% endif %} />
+        {% elif 'DATE' in type_str and 'TIME' not in type_str %}
+          <input class="form-control" type="date" name="{{ name }}" value="{{ prev[name] if prev and prev.get(name) }}" />
+        {% elif 'TIME' in type_str %}
+          <input class="form-control" type="datetime-local" name="{{ name }}" value="{{ prev[name] if prev and prev.get(name) }}" />
+        {% elif 'INT' in type_str %}
+          <input class="form-control" type="number" step="1" name="{{ name }}" value="{{ prev[name] if prev and prev.get(name) }}" />
+        {% elif 'DOUBLE' in type_str or 'NUMERIC' in type_str or 'REAL' in type_str or 'FLOAT' in type_str %}
+          <input class="form-control" type="number" step="any" name="{{ name }}" value="{{ prev[name] if prev and prev.get(name) }}" />
+        {% elif 'JSON' in type_str %}
+          <textarea class="form-control" name="{{ name }}" rows="4">{{ prev[name] if prev and prev.get(name) }}</textarea>
+        {% else %}
+          <input class="form-control" name="{{ name }}" value="{{ prev[name] if prev and prev.get(name) }}" />
+        {% endif %}
+        {% if errors and errors.get(name) %}
+          <div class="muted" style="color:#ffb4b4">{{ errors.get(name) }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-primary" type="submit">Insert</button>
+      <a class="btn btn-outline-primary" href="/table/{{ table }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
