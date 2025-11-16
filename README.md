@@ -4,7 +4,7 @@ A full‑stack playground for experimenting with a modern data‑driven app:
 
 - **PostgreSQL** as the primary database
 - **Hasura GraphQL Engine** to auto-generate a real-time GraphQL API
-- **Auth0** for authentication and JWT-based authorization
+- **Auth0** for authentication and JWT-based authorization (failed/gave up)
 - **React (YouthInvestments)** as the main front-end
 - **Vite-based GraphQL client** for testing queries and mutations
 - **Python UI service** for simple DB admin views
@@ -16,7 +16,7 @@ This repo is a learning sandbox to:
 
 - Practice modelling data in **PostgreSQL** and writing SQL
 - Explore how **Hasura** exposes a Postgres schema via GraphQL with permissions
-- Understand **JWT flows** end-to-end using **Auth0** and Hasura's JWT config
+- Understand **JWT flows** end-to-end using **Auth0** and Hasura's JWT config :(
 - Build a **React** front-end that talks securely to a GraphQL backend
 - Get hands-on with **Docker**, multi-service dev environments, and environment-based config
 
@@ -39,16 +39,15 @@ It’s meant for anyone who wants to inspect the stack, run it locally, and exte
 - PostgreSQL
 - Hasura GraphQL Engine
 - SQL (schema, queries, inserts)
-- pgAdmin
 
 **APIs & auth**
 - GraphQL (queries, mutations, roles)
-- Auth0 (SPA auth, access tokens, JWKS / JWT configuration)
-- Hasura JWT + role-based permissions
+- Auth0 (SPA auth, access tokens, JWKS / JWT configuration) :(
+- Hasura JWT + role-based permissions :(
 
 **Front-end**
 - React + Vite (`YouthInvestments/` and `client/`)
-- `@auth0/auth0-react` for authentication in React
+- `@auth0/auth0-react` for authentication in React :(
 
 **DevOps / tooling**
 - Docker & Docker Compose
@@ -69,7 +68,7 @@ git clone https://github.com/<your-user>/<your-repo>.git
 cd <your-repo>
 ```
 
-### Configure Auth0 (local only)
+### Configure Auth0 (local only, and it probably wont work, but do try anyways) 
 
 Create an Auth0 application (Single Page Application) and API, then set up these values in local env files (these files are **ignored by Git**; do not commit them):
 
@@ -165,11 +164,11 @@ Open `http://localhost:8000`.
 
 ## Security & secrets
 
-- **Do not commit** `.env`, `.env.local`, or any real keys – they are already gitignored.
+- **Do not commit** `.env`, `.env.local`, or any real API keys or secrets – in this repo they are already gitignored. (i learned this the hard way previously)
 - Values like `admin123` in `docker-compose.yml` are **dev-only placeholders**. Replace them with secure values via env vars in real deployments.
 - For Auth0 + Hasura integration, use:
   - Auth0 JWKS URL in `HASURA_GRAPHQL_JWT_SECRET`
-  - Access tokens from Auth0 (via `@auth0/auth0-react`) sent as `Authorization: Bearer <token>` to Hasura.
+  - Access tokens from Auth0 (via `@auth0/auth0-react`) sent as `Authorization: Bearer <token>` to Hasura. (didnt reach this point to due to invalid JWTs and gave up... i gave up because i already learned so much in this project, this was a good time to stop and recap and begin something new)
 
 ## Extending the project
 
@@ -180,4 +179,4 @@ Ideas for extending this playground:
 - Build richer React views (lists, detail pages, mutations)
 - Add tests or CI workflows for the frontend and backend
 
-PRs, forks, and experiments are all welcome – this repo is meant to be a place to tinker and learn.
+PRs, forks, and experiments are all welcome – this repo is meant to be a place to tinker and learn, ecspeacially if you are able to figure out where my JWTs went wrong.
